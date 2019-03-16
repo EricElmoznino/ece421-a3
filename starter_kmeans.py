@@ -11,5 +11,7 @@ def distance_func(x, mu):
     # mu: is an KxD matrix (K means and D dimensions)
     # Outputs
     # pair_dist: is the pairwise distance matrix (NxK)
-    # todo
-    pass
+    x = tf.reshape(x, [x.shape[0], 1, x.shape[1]])
+    mu = tf.reshape(mu, [1, mu.shape[0], mu.shape[1]])
+    pair_dist = tf.reduce_sum(((x - mu) ** 2), axis=-1)
+    return pair_dist
