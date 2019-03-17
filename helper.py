@@ -2,12 +2,14 @@ import tensorflow as tf
 import numpy as np
 
 
-def load_data(high_dim):
+def load_data(use_val, high_dim):
     # Loading data
     if high_dim:
         data = np.load('data100D.npy')
     else:
         data = np.load('data2D.npy')
+    if not use_val:
+        return data
     num_pts, _ = np.shape(data)
     valid_batch = int(num_pts / 3.0)
     np.random.seed(45689)
