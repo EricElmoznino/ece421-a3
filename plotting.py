@@ -11,14 +11,14 @@ def line_plot(x, ys, labels, x_label, y_label, save_path):
 def k_means_plot_2d(x, assignments, k, save_path):
     plt.close()
     x_assigned = [x[assignments == i] for i in range(k)]
-    plots = [plt.scatter(x[:, 0], x[:, 1], label='k = %d' % i) for i, x in enumerate(x_assigned)]
+    plots = [plt.scatter(x[:, 0], x[:, 1], label='k = %d' % i, s=1) for i, x in enumerate(x_assigned)]
     plt.legend(handles=plots)
     save_plot(save_path)
 
 
 def data_plot_2d(x, save_path):
     plt.close()
-    plot = plt.scatter(x[:, 0], x[:, 1])
+    plot = plt.scatter(x[:, 0], x[:, 1], s=1)
     save_plot(save_path)
 
 
