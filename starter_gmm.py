@@ -1,26 +1,9 @@
 import tensorflow as tf
 import numpy as np
 import math as math
-import matplotlib.pyplot as plt
 import helper as hlp
 
 
-# Loading data
-#data = np.load('data100D.npy')
-"""
-data = np.load('data2D.npy')
-[num_pts, dim] = np.shape(data)
-
-# For Validation set
-if is_valid:
-  valid_batch = int(num_pts / 3.0)
-  np.random.seed(45689)
-  rnd_idx = np.arange(num_pts)
-  np.random.shuffle(rnd_idx)
-  val_data = data[rnd_idx[:valid_batch]]
-  data = data[rnd_idx[valid_batch:]]
-
-"""
 # Distance function for GMM
 def distance_func(x, mu):
     # Inputs
@@ -45,8 +28,6 @@ def log_gauss_pdf(x, mu, sigma):
     # log Gaussian PDF N X K
     pair_dist = distance_func(x, mu)
     log_gauss = -1 * pair_dist/ (2 * tf.reshape(sigma ** 2, [-1])) - int(mu.shape[1]) * tf.log(np.sqrt(2 * math.pi) * tf.reshape(sigma, [-1]))
-    #log_gauss = -1 * tf.reduce_sum(((x - mu) ** 2), axis=-1) / (2 * sigma ** 2) - tf.math.log(
-        #2 * tf.math.pi ** (mu.shape[1] / 2) * sigma ** 2) / 2
     return log_gauss
 
 
@@ -58,12 +39,14 @@ def log_posterior(log_pdf, log_pi):
     # Outputs
     # log_post: N X K
 
-    return log_pdf + tf.reshape(log_pi, [-1]) - hlp.reduce_logsumexp(log_pdf + tf.reshape(log_pi, [-1]), reduction_indices=1, keep_dims = True) #iog_pdf- reduce_logsumexp(log_pdf, reduction_indices=0, keep_dims=True)
+    return log_pdf + tf.reshape(log_pi, [-1]) - hlp.reduce_logsumexp(log_pdf + tf.reshape(log_pi, [-1]), reduction_indices=1, keep_dims = True)
+
 
 def neg_log_prob(x, mu, sigma, log_pi):
     log_pdf = log_gauss_pdf(x, mu, sigma) #pdf
     log_likelihood = tf.reshape(hlp.reduce_logsumexp(log_pdf+tf.reshape(log_pi, [-1])), [-1, 1])
     return -1 * log_likelihood
+
 
 def build_graph(d, k, lr):
     x = tf.placeholder(dtype=tf.float32, shape=[None, d])
