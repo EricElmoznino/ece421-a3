@@ -58,11 +58,11 @@ def log_posterior(log_pdf, log_pi):
     # Outputs
     # log_post: N X K
 
-    return log_pdf + tf.reshape(log_pi, [-1]) - hlp.reduce_logsumexp(log_pdf + tf.reshape(log_pi, -[1]), reduction_indices=1, keep_dims = True) #iog_pdf- reduce_logsumexp(log_pdf, reduction_indices=0, keep_dims=True)
+    return log_pdf + tf.reshape(log_pi, [-1]) - hlp.reduce_logsumexp(log_pdf + tf.reshape(log_pi, [-1]), reduction_indices=1, keep_dims = True) #iog_pdf- reduce_logsumexp(log_pdf, reduction_indices=0, keep_dims=True)
 
 def neg_log_prob(x, mu, sigma, log_pi):
     log_pdf = log_gauss_pdf(x, mu, sigma) #pdf
-    log_likelihood = hlp.reduce_logsumexp(tf.exp(log_pdf+tf.reshape(log_pi, [-1])))
+    log_likelihood = tf.reshape(hlp.reduce_logsumexp(log_pdf+tf.reshape(log_pi, [-1])), [-1, 1])
     return -1 * log_likelihood
 
 def build_graph(d, k, lr):
@@ -72,8 +72,8 @@ def build_graph(d, k, lr):
     pi = tf.Variable(initial_value=tf.random_normal(shape=[k, 1]))
     log_pi = hlp.logsoftmax(tf.reshape(pi,[-1]))
     loss = neg_log_prob(x, mu, tf.exp(sigma), log_pi)
-    assignments = tf.argmin(loss, axis=-1)
-    loss = tf.reduce_sum(tf.reduce_min(loss, axis=-1))
+    assignments = tf.argmin(distance_func(x, mu), axis=-1)
+    loss = tf.reduce_sum(loss)
     optimizer = tf.train.AdamOptimizer(learning_rate=lr, beta1=0.9, beta2=0.99, epsilon=1e-5)
     optimizer_op = optimizer.minimize(loss)
     return x, mu, sigma, pi, assignments, loss, optimizer_op

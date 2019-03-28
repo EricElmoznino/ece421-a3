@@ -95,7 +95,7 @@ class Part2(unittest.TestCase):
         self.train = load_data(use_val=False, high_dim=False)
         data_plot_2d(self.train, os.path.join('results', '2_1', 'data.png'))
 
-        ks = [3]
+        ks = [1,2,3,4,5]
         metrics = [{'Training loss': []} for _ in ks]
         cluster_assignments = []
         epochs = 200
