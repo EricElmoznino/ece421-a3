@@ -130,7 +130,7 @@ class Part2(unittest.TestCase):
 
 
 
-    def test_3(self):
+    def test_2(self):
         self.train, self.val = load_data(use_val=True, high_dim=False)
 
         ks = [1, 2, 3, 4, 5]
@@ -171,7 +171,7 @@ class Part2(unittest.TestCase):
                 f.write(' '.join(assigned_percentages))
 
 
-    def test_4(self): #part2.2 q3 km
+    def test_3(self): #part2.2 q3 km
         self.train = load_data(use_val=False, high_dim=True)
 
         ks = [5]
@@ -208,7 +208,7 @@ class Part2(unittest.TestCase):
                 f.write(' '.join(assigned_percentages))
 
 
-    def test_5(self): #part 2.2 q3 MOG
+    def test_4(self): #part 2.2 q3 MOG
         self.train = load_data(use_val=False, high_dim=True)
 
         ks = [5]
