@@ -174,7 +174,7 @@ class Part2(unittest.TestCase):
     def test_3(self): #part2.2 q3 km
         self.train = load_data(use_val=False, high_dim=True)
 
-        ks = [5]
+        ks = [5, 10, 15, 20, 30]
         metrics = [{'Training loss': []} for _ in ks]
         cluster_assignments = []
         epochs = 200
@@ -211,7 +211,7 @@ class Part2(unittest.TestCase):
     def test_4(self): #part 2.2 q3 MOG
         self.train = load_data(use_val=False, high_dim=True)
 
-        ks = [5]
+        ks = [5, 10, 15, 20, 30]
         metrics = [{'Training loss': []} for _ in ks]
         cluster_assignments = []
         epochs = 200
