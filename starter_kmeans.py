@@ -7,8 +7,8 @@ def distance_func(x, mu):
     # mu: is an KxD matrix (K means and D dimensions)
     # Outputs
     # pair_dist: is the pairwise distance matrix (NxK)
-    x = tf.reshape(x, [-1, 1, x.shape[1]])
-    mu = tf.reshape(mu, [1, mu.shape[0], mu.shape[1]])
+    x = tf.reshape(x, [-1, 1, int(x.shape[1])])
+    mu = tf.reshape(mu, [1, int(mu.shape[0]), int(mu.shape[1])])
     pair_dist = tf.reduce_sum(((x - mu) ** 2), axis=-1)
     return pair_dist
 
