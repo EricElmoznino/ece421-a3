@@ -5,7 +5,7 @@ import tensorflow as tf
 
 import starter_kmeans as km
 import starter_gmm as gmm
-from helper import load_data
+from helper import *
 from plotting import *
 
 
@@ -91,26 +91,32 @@ class Part1(unittest.TestCase):
 
 class Part2(unittest.TestCase):
 
-    def test_1(self):   # part 2.2 q1
+    def test_1(self):   # part2.2 q1
         self.train = load_data(use_val=False, high_dim=False)
         data_plot_2d(self.train, os.path.join('results', '2_1', 'data.png'))
 
         ks = [3]
         metrics = [{'Training loss': []} for _ in ks]
         cluster_assignments = []
-        epochs = 200
-        lr = 0.05
+        epochs = 500
+        lr = 0.01
 
         for k, metric in zip(ks, metrics):
             print('Training with k=%d' % k)
             tf.reset_default_graph()
             x, mu, sigma, pi, assignments, loss, optimizer_op = gmm.build_graph(self.train.shape[-1], k, lr)
             sess = tf.Session()
-            sess.run(tf.global_variables_initializer())
+            r = sess.run(tf.global_variables_initializer())
             for _ in tqdm(range(0, epochs + 1)):
                 train_loss, _ = sess.run([loss, optimizer_op], feed_dict={x: self.train})
                 metric['Training loss'].append(train_loss)
             cluster_assignments.append(sess.run(assignments, feed_dict={x: self.train}))
+            mur = mu.eval(session=sess)
+            sigmar = sigma.eval(session=sess)
+            pir = pi.eval(session=sess)
+            print('mu = ', mur)
+            print('sigma = ', sigmar)
+            print('pi = ', pir)
 
         for title in metrics[0]:
             line_plot(list(range(0, epochs + 1)), [m[title] for m in metrics],
@@ -129,16 +135,15 @@ class Part2(unittest.TestCase):
                 f.write(' '.join(assigned_percentages))
 
 
-
-    def test_2(self):
+    def test_2(self): #part2.2 q2
         self.train, self.val = load_data(use_val=True, high_dim=False)
 
         ks = [1, 2, 3, 4, 5]
         metrics = [{'Training loss': [], 'Validation loss': []} for _ in ks]
         cluster_assignments_train = []
         cluster_assignments_val = []
-        epochs = 200
-        lr = 0.05
+        epochs = 500
+        lr = 0.01
 
         for k, metric in zip(ks, metrics):
             print('Training with k=%d' % k)
@@ -214,7 +219,7 @@ class Part2(unittest.TestCase):
         ks = [5, 10, 15, 20, 30]
         metrics = [{'Training loss': []} for _ in ks]
         cluster_assignments = []
-        epochs = 200
+        epochs = 500
         lr = 0.05
 
         for k, metric in zip(ks, metrics):

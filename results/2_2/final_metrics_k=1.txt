@@ -1,3 +1,3 @@
-Training loss: 23266
-Validation loss: 11651.4
+Training loss: 23345.3
+Validation loss: 11709.2
 0:1
